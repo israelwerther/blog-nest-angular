@@ -73,7 +73,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "remove", null);
 PostController = __decorate([
-    (0, common_1.Controller)('post'),
+    (0, common_1.Controller)('posts'),
     __metadata("design:paramtypes", [post_service_1.PostService])
 ], PostController);
 exports.PostController = PostController;

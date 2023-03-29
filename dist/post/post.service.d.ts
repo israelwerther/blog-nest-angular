@@ -1,9 +1,13 @@
+import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post } from './entities/post.entity';
 export declare class PostService {
-    create(createPostDto: CreatePostDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updatePostDto: UpdatePostDto): string;
-    remove(id: number): string;
+    private readonly repo;
+    constructor(repo: Repository<Post>);
+    create(createPostDto: CreatePostDto): Promise<import("typeorm").InsertResult>;
+    findAll(): Promise<Post[]>;
+    findOne(id: number): Promise<Post>;
+    update(id: number, updatePostDto: UpdatePostDto): Promise<import("typeorm").UpdateResult>;
+    remove(id: number): Promise<import("typeorm").DeleteResult>;
 }
