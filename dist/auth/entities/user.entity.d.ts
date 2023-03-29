@@ -1,3 +1,4 @@
+import { Post } from "src/post/entities/post.entity";
 export declare class User {
     id: number;
     firstname: string;
@@ -5,4 +6,5 @@ export declare class User {
     email: string;
     password: string;
     profilePic: string;
+    posts: Post[];
 }
