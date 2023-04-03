@@ -8,6 +8,8 @@ export declare class Post {
     createdOn: Date;
     modifiedOn: Date;
     mainImageUrl: string;
+    userId: number;
+    categoryId: number;
     user: User;
     category: Category;
 }
