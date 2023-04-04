@@ -12,7 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const post_entity_1 = require("../../post/entities/post.entity");
+const bcrypt = require("bcryptjs");
 let User = class User {
+    hashPassword() {
+        this.password = bcrypt.hashSync(this.password, 10);
+    }
 };
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
@@ -42,6 +46,12 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => post_entity_1.Post, (post) => post.user),
     __metadata("design:type", Array)
 ], User.prototype, "posts", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], User.prototype, "hashPassword", null);
 User = __decorate([
     (0, typeorm_1.Entity)('users')
 ], User);

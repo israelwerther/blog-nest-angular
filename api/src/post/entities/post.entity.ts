@@ -1,6 +1,7 @@
 import { Category } from "src/category/entities/category.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "src/auth/entities/user.entity";
+import slugify from "slugify";
 
 @Entity('posts')
 export class Post {
@@ -25,10 +26,10 @@ export class Post {
     @Column({ default: 3 })
     categoryId: number;
     
-    @ManyToOne(() => User, (user) => user.posts, {
+    @ManyToOne(() => User, (user) => user.posts, { 
         eager: true
     })
-    @JoinColumn({
+    @JoinColumn({ 
         name: 'userId',
         referencedColumnName: 'id'
     })
@@ -42,4 +43,12 @@ export class Post {
         referencedColumnName: 'id'
     })
     category: Category
+
+    @BeforeInsert()
+    slugifyPost(){
+        this.slug = slugify( this.title.substring(0, 20), {
+            lower: true,
+            replacement: '_'
+        });
+    }
 }

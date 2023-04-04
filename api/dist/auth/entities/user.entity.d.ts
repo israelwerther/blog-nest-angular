@@ -7,4 +7,5 @@ export declare class User {
     password: string;
     profilePic: string;
     posts: Post[];
+    hashPassword(): void;
 }
