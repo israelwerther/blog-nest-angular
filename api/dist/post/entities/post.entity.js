@@ -14,6 +14,7 @@ const category_entity_1 = require("../../category/entities/category.entity");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../auth/entities/user.entity");
 const slugify_1 = require("slugify");
+const class_transformer_1 = require("class-transformer");
 let Post = class Post {
     slugifyPost() {
         this.slug = (0, slugify_1.default)(this.title.substring(0, 20), {
@@ -52,10 +53,12 @@ __decorate([
 ], Post.prototype, "mainImageUrl", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", Number)
 ], Post.prototype, "userId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ default: 3 }),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", Number)
 ], Post.prototype, "categoryId", void 0);
 __decorate([

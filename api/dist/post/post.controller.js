@@ -75,6 +75,7 @@ __decorate([
 ], PostController.prototype, "remove", null);
 PostController = __decorate([
     (0, common_1.Controller)('posts'),
+    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     __metadata("design:paramtypes", [post_service_1.PostService])
 ], PostController);
 exports.PostController = PostController;
