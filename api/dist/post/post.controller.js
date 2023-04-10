@@ -21,17 +21,20 @@ let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
     }
-    create(createPostDto) {
-        return this.postService.create(createPostDto);
+    create(createPostDto, req) {
+        return this.postService.create(createPostDto, req.user);
     }
-    findAll() {
-        return this.postService.findAll();
+    findAll(query) {
+        return this.postService.findAll(query);
     }
     findOne(id) {
         return this.postService.findOne(+id);
     }
-    update(id, updatePostDto) {
-        return this.postService.update(+id, updatePostDto);
+    findBySlug(slug) {
+        return this.postService.findBySlug(slug);
+    }
+    update(slug, updatePostDto) {
+        return this.postService.update(slug, updatePostDto);
     }
     remove(id) {
         return this.postService.remove(+id);
@@ -41,14 +44,16 @@ __decorate([
     (0, common_1.Post)(),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "findAll", null);
 __decorate([
@@ -59,8 +64,15 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)('/slug/:slug'),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostController.prototype, "findBySlug", null);
+__decorate([
+    (0, common_1.Patch)(':slug'),
+    __param(0, (0, common_1.Param)('slug')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_post_dto_1.UpdatePostDto]),

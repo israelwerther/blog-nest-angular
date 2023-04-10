@@ -21,15 +21,37 @@ let PostService = class PostService {
     constructor(repo) {
         this.repo = repo;
     }
-    async create(createPostDto) {
+    async create(createPostDto, user) {
         const post = new post_entity_1.Post();
         post.userId = 1;
         Object.assign(post, createPostDto);
         this.repo.create(post);
         return await this.repo.save(post);
     }
-    async findAll() {
-        return await this.repo.find();
+    async findAll(query) {
+        const myQuery = this.repo.createQueryBuilder("post").leftJoinAndSelect("post.category", "category").leftJoinAndSelect("post.user", "user");
+        console.log("===========================");
+        if (!(Object.keys(query).length === 0) && query.constructor === Object) {
+            const queryKeys = Object.keys(query);
+            console.log("Console 0", queryKeys);
+            if (queryKeys.includes('title')) {
+                myQuery.where('post.title LIKE :title', { title: `%${query['title']}%` });
+                console.log("Console 1");
+            }
+            if (queryKeys.includes('sort')) {
+                console.log("Console 2");
+                myQuery.orderBy('post.title', query['sort'].toUpperCase());
+            }
+            if (queryKeys.includes('category')) {
+                console.log("Console 3", { cat: query['category'] });
+                myQuery.andWhere('category.title = :cat', { cat: query['category'] });
+            }
+            return await myQuery.getMany();
+        }
+        else {
+            console.log("Console 4");
+            return await myQuery.getMany();
+        }
     }
     async findOne(id) {
         const post = await this.repo.findOne({ where: { id } });
@@ -39,11 +61,34 @@ let PostService = class PostService {
         }
         return post;
     }
-    async update(id, updatePostDto) {
-        return await this.repo.update(id, updatePostDto);
+    async findBySlug(slug) {
+        console.log(`here 1 ${slug}`);
+        try {
+            const post = await this.repo.findOneOrFail({ where: { slug } });
+            return post;
+        }
+        catch (err) {
+            console.log("here 2");
+            throw new common_1.BadRequestException(`Post with slug ${slug} not found`);
+        }
+    }
+    async update(slug, updatePostDto) {
+        const post = await this.repo.findOne({ where: { slug } });
+        if (!post) {
+            throw new common_1.BadRequestException("Post not found");
+        }
+        post.modifiedOn = new Date(Date.now());
+        post.category = updatePostDto.category;
+        Object.assign(post, updatePostDto);
+        return this.repo.save(post);
     }
     async remove(id) {
-        return await this.repo.delete(id);
+        const post = await this.repo.findOne({ where: { id } });
+        if (!post) {
+            throw new common_1.BadRequestException("Post not found");
+        }
+        await this.repo.remove(post);
+        return { success: true, post };
     }
 };
 PostService = __decorate([
